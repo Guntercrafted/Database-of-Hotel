@@ -1,0 +1,186 @@
+create database aster_hotel;
+
+use aster_hotel;
+
+CREATE TABLE Branch (
+Branch_ID VARCHAR(5) NOT NULL,
+Branch_Address VARCHAR(70),
+B_Phone_number VARCHAR(12),
+PRIMARY KEY (Branch_ID)
+);
+
+INSERT INTO Branch (Branch_ID, Branch_Address, B_Phone_number) VALUES 
+('C001','164 Khaosan Road Bangkok','02-215-4333'),
+('C002','1542 Ramkhamhaeng Road Bangkok','02-793-5123'),
+('C003','55/4 Rattanathibet Road Nonthaburi','02-213-4321'),
+('N004','17/9 Tha Phae Road Chiang Mai','02-852-6548'),
+('N005','725/3 Rat Burana Road Chiang Rai','02-459-9214'),
+('N006','442 Sumon Thewarat Road Nan','02-945-1258'),
+('S007','2/60 Permphol Road Ranong','02-147-1478'),
+('S008','42/17 Charoen Sub Road Krabi','02-258-3214'),
+('S009','475 Saiburi Road Songkhla','02-021-0214'),
+('NE010','182 Srichan Road Khon Kaen','02-213-0014'),
+('NE011','408/9 Wareeratchadet Road Yasothon','02-541-1004'),
+('NE012','43 Pho Si Road Udon Thani','02-050-5040');
+
+CREATE TABLE Employee (
+Employee_ID CHAR(6) NOT NULL,
+E_Name VARCHAR(50) NOT NULL,
+E_Surname VARCHAR(50) NOT NULL,
+E_Phone_number VARCHAR(13) NOT NULL,
+Date_of_birth DATE NOT NULL,
+Position VARCHAR(50),
+Salary DECIMAL(7, 2),	
+Branch_ID VARCHAR(5),
+Manager_ID CHAR(6),
+PRIMARY KEY (Employee_ID),
+FOREIGN KEY (Branch_ID) REFERENCES Branch (Branch_ID), 	
+FOREIGN KEY (Manager_ID) REFERENCES Employee (Employee_ID)
+);
+
+INSERT INTO Employee (Employee_ID, E_Name, E_Surname, E_Phone_number, Date_of_birth, Position, Salary, Branch_ID) VALUES 
+('E10001','Tanthai','Phupanya','073-554-0011','1949-09-01','Room Service','18000.00','C002'),
+('E10002','Suyada','Jaidee','081-789-0458','1990-05-21','Front Desk ','20000.00','C002'),
+('E10003','Preetrib','Fongdou','088-888-9524','1980-12-31','Hotel General','35000.00','C003'),
+('E20001','Rungroat','Markmee','089-459-5201','1989-01-10','Housekeeping','17000.00','N004'),
+('E20002','Suchadee','jutarat','075-213-5110','2000-05-23','Waiting Staff','20000.00','N006'),
+('E20003','Longdee','Meejai','061-161-6370','2000-06-18','Hotel Porter','15000.00','N006'),
+('E30001','Phisong','Arwon','071-782-9404','1974-10-23','Front Desk','20000.00','S007'),
+('E30002','Somsee','Meechoke','075-257-8099','1960-02-07','Housekeeping','17000.00','S008'),
+('E30003','Patakorn','Pongpiteg','075-249-4110','1980-01-08','Maintenance','25000.00','S009'),
+('E40001','Chulakarn','Jaijitmon','079-940-0497','1981-09-30','Room Service','18000.00','NE010'),
+('E40002','Chulakorn','Jaijetmon','077-048-2322','1973-09-01','Front Desk ','20000.00','C002'),
+('E40003','Hasiwat','Kaewdee','081-808-2197','2000-05-23','Accounting','30000.00','C002');
+
+UPDATE Employee SET Manager_ID = 'E10003' WHERE NOT Employee_ID = 'E10003';
+
+CREATE TABLE Customer (
+Customer_ID CHAR(8) NOT NULL,
+Personal_ID CHAR(13),
+Passport_ID CHAR(7),
+C_Name VARCHAR(50) NOT NULL,
+C_Surname VARCHAR(50) NOT NULL,
+C_Phone_number VARCHAR(13) NOT NULL,
+PRIMARY KEY (Customer_ID)
+);
+
+INSERT INTO Customer (Customer_ID, Personal_ID, Passport_ID, C_Name, C_Surname, C_Phone_number) VALUES 
+('C0000001','1825553634408',NULL,'Suda','Aromdee','081-428-0909'),
+('C0000002','5363578858551',NULL,'Nin','Kasamsun','081-526-8900'),
+('C0000003','7495450214522',NULL,'Sawat','Jurangkool','075-321-4150'),
+('C0000004','9180993611772',NULL,'Jettrin','Sunthorn','083-258-0015'),
+('C0000005','7463239716443',NULL,'Kulpat','Benjawan','079-985-3015'),
+('C0000006','4321653876527',NULL,'Somwang','Klinpraneet','061-577-8788'),
+('C0000007',NULL,'A123461','Kasidid','Yodsuwan','063-144-2242'),
+('C0000008',NULL,'A473629','Chalerm','Panyarachun','063-616-6466'),
+('C0000009',NULL,'B273492','Bumpen','Ratanarak','089-999-9968'),
+('C0000010',NULL,'B583821','Choochai ','Kongpaisarn','087-889-2589'),
+('C0000011',NULL,'A846200','Koradol','Rattanakosin','087-478-2147'),
+('C0000012',NULL,'A473294','Pawin','Wattana','080-133-9919');
+
+CREATE TABLE Bill (
+Bill_number CHAR(7) NOT NULL,
+Date_time DATE,
+Total_Price DECIMAL(10, 2),
+PRIMARY KEY (Bill_number)
+);
+
+INSERT INTO Bill (Bill_number, Date_time, Total_Price) VALUES 
+('B300001','2021-02-18','18000.00'),
+('B300002','2021-02-20','4250.00'),
+('B300003','2021-05-15','4500.00'),
+('B300004','2021-05-15','36000.00'),
+('B300005','2021-05-30','234000.00'),
+('B300006','2021-08-01','52000.00'),
+('B300007','2021-08-18','22500.00'),
+('B300008','2021-10-21','8250.00'),
+('B300009','2021-10-18','49500.00'),
+('B300010','2021-11-30','25500.00'),
+('B300011','2021-12-21','182000.00'),
+('B300012','2021-12-31','27000.00');
+
+CREATE TABLE Room (
+Room_number CHAR(4) NOT NULL,
+Branch_ID VARCHAR(5),
+Type_room VARCHAR(50) NOT NULL,
+Price DECIMAL(10, 2),
+PRIMARY KEY (Room_number),
+FOREIGN KEY (Branch_ID) REFERENCES Branch (Branch_ID)
+);
+
+INSERT INTO Room (Room_number, Branch_ID, Type_room, Price) VALUES 
+('A001','C001','Single Bed Room','750.00'),
+('A002','C001','Single Bed Room','750.00'),
+('A003','C001','Double Bed Room ','1500.00'),
+('A004','C001','Double Bed Room ','1500.00'),
+('A005','C001','Quad Bed Room','4000.00'),
+('A006','C001','Quad Bed Room','4000.00'),
+('A007','C001','Queen Bed Room','7500.00'),
+('A008','C001','Queen Bed Room','7500.00'),
+('A009','C001','King Bed Room','8500.00'),
+('A010','C001','King Bed Room','8500.00'),
+('A011','C001','Executive Suite Bedroom','12500.00'),
+('A012','C001','Executive Suite Bedroom','12500.00'),
+('A013','C001','President Suit Bedroom','13000.00'),
+('A014','C001','President Suit Bedroom','13000.00'),
+('A015','C001','Cabana Bed Room','4000.00'),
+('A016','C001','Cabana Bed Room','4000.00'),
+('A017','C001','Poolside view Bed Room','6500.00'),
+('A018','C001','Poolside view Bed Room','6500.00'),
+('A019','C001','Accessible Bed Room','4500.00'),
+('A020','C001','Accessible Bed Room','4500.00'),
+('A021','C001','Murphy Bed Room','1500.00'),
+('A022','C001','Murphy Bed Room','1500.00'),
+('A023','C001','Smoking Bed Room','850.00'),
+('A024','C001','Smoking Bed Room','850.00'),
+('B001','N004','Single Bed Room','750.00'),
+('B002','N004','Single Bed Room','750.00'),
+('B003','N004','Double Bed Room ','1500.00'),
+('B004','N004','Double Bed Room ','1500.00'),
+('B005','N004','Quad Bed Room','4000.00'),
+('B006','N004','Quad Bed Room','4000.00'),
+('B007','N004','Queen Bed Room','7500.00'),
+('B008','N004','Queen Bed Room','7500.00'),
+('B009','N004','King Bed Room','8500.00'),
+('B010','N004','King Bed Room','8500.00'),
+('B011','N004','Executive Suite Bed Room','12500.00'),
+('B012','N004','Executive Suite Bed Room','12500.00'),
+('B013','N004','President Suit Bed Room','13000.00'),
+('B014','N004','President Suit Bed Room','13000.00'),
+('B015','N004','Cabana Bed Room','4000.00'),
+('B016','N004','Cabana Bed Room','4000.00'),
+('B017','N004','Poolside view Bed Room','6500.00'),
+('B018','N004','Poolside view Bed Room','6500.00'),
+('B019','N004','Accessible Bed Room','4500.00'),
+('B020','N004','Accessible Bed Room','4500.00'),
+('B021','N004','Murphy Bed Room','1500.00'),
+('B022','N004','Murphy Bed Room','1500.00'),
+('B023','N004','Smoking Bed Room','850.00'),
+('B024','N004','Smoking Bed Room','850.00');
+
+CREATE TABLE Booking (
+Booking_ID CHAR(6) NOT NULL,
+Customer_ID CHAR(8),
+Room_number CHAR(4),
+Check_in DATE,
+Check_out DATE,
+PRIMARY KEY (Booking_ID),
+FOREIGN KEY (Customer_ID) REFERENCES Customer (Customer_ID),
+FOREIGN KEY (Room_number) REFERENCES Room (Room_number)
+);
+
+INSERT INTO Booking (Booking_ID, Customer_ID, Room_number, Check_in, Check_out) VALUES 
+('BK0001','C0000001','A003','2022-01-01','2022-01-07'),
+('BK0002','C0000001','A004','2022-01-01','2022-01-07'),
+('BK0003','C0000002','B023','2022-02-15','2022-02-20'),
+('BK0004','C0000003','A004','2022-04-13','2022-04-16'),
+('BK0005','C0000004','B019','2022-04-13','2022-04-20'),
+('BK0006','C0000005','A014','2022-04-13','2022-04-30'),
+('BK0007','C0000006','A013','2022-06-03','2022-06-05'),
+('BK0008','C0000007','A020','2022-06-10','2022-06-15'),
+('BK0009','C0000008','B002','2022-08-17','2022-08-28'),
+('BK0010','C0000009','A019','2022-09-20','2022-10-01'),
+('BK0011','C0000010','B004','2022-11-11','2022-11-28'),
+('BK0012','C0000011','B013','2022-12-01','2022-12-15'),
+('BK0013','C0000001','A003','2022-12-23','2023-01-01'),
+('BK0014','C0000001','A004','2022-12-23','2023-01-01');
